@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "portfolio"
+version = "0.1.0"
+description = "List of apis that I use a lot"
+authors = ["Daniel Wallace <danielwallace@gtmanfred.com>"]
+license = "APACHE-2.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.88.0"
+figenv = "^1.4.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.0"
+coverage = "^6.5.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
