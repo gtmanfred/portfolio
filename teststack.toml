@@ -1,0 +1,11 @@
+[tests]
+min_version = "v0.11.0"
+
+[tests.ports]
+"8000/tcp" = ""
+
+[tests.environment]
+PORT = "8000"
+
+[tests.export]
+PORTFOLIO_URL = "http://{HOST}:{PORT;8000/tcp}/"
