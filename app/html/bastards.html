@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<!--
+  Portions of the project have been copied from
+  https://github.com/funkaoshi/randomcharacter and is copyrighted by
+  Copyright (c) 2014 Ramanan Sivaranjan under the terms of the MIT license.
+-->
+<html>
+  <head>
+    <meta name="viewport" content="width=480"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Josefin+Sans:400,700|Metamorphous" type="text/css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css" type="text/css">
+    <link rel="stylesheet" href="/static/create.css" type="text/css" media="screen" title="site style" charset="utf-8">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vue-router@4"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+    <script src="https://unpkg.com/swagger-client@3/dist/swagger-client.browser.min.js"></script>
+  </head>
+  <body>
+    <div id="container" class="default">
+      <router-view></router-view>
+    </div>
+  </body>
+  <script type="text/javascript">
+    const Sheet = {
+      template: `
+      <div v-if="character">
+        <title>A Random {{ character.klass }} for Bastards</title>
+        <h2 class="system">Bastards</h2>
+        <h1>{{ character.klass }}</h1>
+        
+        <table class="attr">
+          <tr>
+            <td><strong>Strength</strong>: {{ character.stats.strength }}</td>
+            <td><strong>Luck</strong><span class="mdi mdi-clover">: {{ character.stats.luck}}</span></td>
+          </tr>
+          <tr>
+            <td><strong>Dexterity</strong>: {{ character.stats.dexterity }}</td>
+            <td><strong>HP</strong><span class="mdi mdi-heart">: {{character.hp}}</span></td>
+          </tr>
+          <tr>
+            <td><strong>Wisdom</strong>: {{ character.stats.wisdom }}</td>
+            <td><strong>AC</strong><span class="mdi mdi-shield">: {{character.ac}}</span></td>
+          </tr>
+        </table>
+        
+        <p v-for="ability in character.abilities">{{ability}}</p>
+        
+        <div id="extras">
+          <div class="block">
+            <h3>Inventory</h3>
+            <strong>Load</strong><span class="mdi mdi-bag-personal">: ...</span>
+            <ol>
+              <div v-for="item in character.inventory">
+                <li v-if="item.quantity > 1">{{ item.name }} (qty: {{item.quantity}})</li>
+                <li v-else-if="item.info">{{ item.name }}: {{item.info}}</li>
+                <li v-else-if="item.size">{{ item.name }}: ({{item.size.name}})</li>
+                <li v-else>{{ item.name }}</li>
+              </div>
+            </ol>
+          </div>
+          <div class="block" v-if="character.spells.length">
+            <h3>Spells</h3>
+            <ol>
+              <li v-for="spell in character.spells">{{ spell.text }}</li>
+            </ol>
+          </div>
+        </div>
+        
+        <footer>
+          <tr>
+            <td>
+              <button class="btn" @click="copyLink()"><span class="mdi mdi-content-copy">share</span></button>
+            </td>
+            <td>
+              <button class="btn" @click="createCharacter()"><span class="mdi mdi-account">create</span></button>
+            </td>
+            <td>
+              <button class="btn" @click="createCommoner()"><span class="mdi mdi-account-minus">commoner</span></button>
+            </td>
+            <td>
+              <button class="btn" @click="createWithExtraClasses()"><span class="mdi mdi-account-star">extra classes</span></button>
+            </td>
+          </tr>
+          <br>
+          <a href="https://ko-fi.com/gtmanfred">buy me a coffee</a>
+          <br>
+          <a href="https://github.com/gtmanfred/portfolio">github</a>
+        </footer>
+      </div>
+      `,
+      computed: {
+        character_id() {
+          return this.$route.params.character_id;
+        },
+      },
+      created() {
+        new SwaggerClient('/openapi.json').then(
+          (client) => {
+            if (this.$route.params.character_id) {
+              client.apis.bastards.get_character({character_id: this.$route.params.character_id}).then((resp) => {
+                this.character = resp.body;
+              });
+            } else {
+              client.apis.bastards.get_new_character().then((resp) => {
+                this.character = resp.body;
+              });
+            };
+          },
+        );
+      },
+      methods: {
+        copyLink() {
+          navigator.clipboard.writeText(`${window.location.origin}/bastards/${this.character.seed}${window.location.search}`);
+        },
+        createCharacter() {
+          router.go({ path: '/bastards/'})
+        },
+        createCommoner() {
+          router.go({ name: 'sheet', query: {commoner: true}})
+        },
+        createWithExtraClasses() {
+          router.go({ name: 'sheet', query: {extra_classes: true}})
+        },
+      },
+      data() {
+        return {
+          character: null,
+        };
+      },
+    }
+    const routes = [
+      { name: "sheet", path: '/bastards/:character_id?', component: Sheet },
+    ]
+    const router = VueRouter.createRouter({
+      history: VueRouter.createWebHistory(),
+      routes,
+    });
+
+    const app = Vue.createApp({
+      mounted() {
+        $(function () {
+          $("#extras").masonry({
+            itemSelector : ".block",
+          });
+        });
+      },
+    });
+
+    app.use(router);
+    router.isReady().then(() => {
+      app.mount('#container');
+    });
+  </script>
+</html>
