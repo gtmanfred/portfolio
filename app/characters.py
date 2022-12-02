@@ -12,7 +12,10 @@ from .utils.types import (
     Stats,
     Weapon,
 )
-from .data.classes import base_classes
+from .data.classes import (
+    base_classes,
+    extra_classes,
+)
 from .data.items import (
     ARMOR,
     WEAPON,
@@ -26,13 +29,16 @@ from .data.spells import (
     OBJECTS,
 )
 
+
 class Character(pydantic.BaseModel):
 
     name: str
     klass: str
     stats: Stats
     hp: int
+    ac: int
     abilities: list[str]
+    max_load: int
     inventory: list[Weapon | Armor | Ammo | Equipment]
     spells: list[Spell]
 
@@ -56,13 +62,15 @@ class CharacterGenerator:
             klass=character.class_,
             stats=character.stats,
             hp=character.hp,
+            ac=len([item for item in character.inventory if isinstance(item, Armor)]),
+            max_load=character.max_load,
             abilities=character.abilities,
             inventory=character.inventory,
             spells=character.spells,
         )
 
-
     def _generate(self, seed=None):
+        self.seed = seed
         if seed is not None:
             random.seed(seed)
 
@@ -90,30 +98,60 @@ class CharacterGenerator:
             wisdom=wisdom,
             luck=max(strength, dexterity, wisdom) // 2
         )
+        self.max_load = strength
 
     def _generate_hp(self):
         hp_diff = random.randint(1, 6)
-        self.hp = self.stats.strength + hp_diff
 
-        if self.extra_classes:
-            data = extra_classes(hp_diff)
+        if self.commoner:
+            self.hp = hp_diff
+            match hp_diff:
+                case 1:
+                    self.class_ = 'scholar'
+                    self.stats.wisdom += 3
+                case 2:
+                    self.class_ = 'acolyte'
+                    self.stats.dexterity += 3
+                case 3:
+                    self.class_ = 'burglar'
+                    self.stats.dexterity += 3
+                case 4:
+                    self.class_ = 'farmer'
+                    self.stats.strength += 3
+                case 5:
+                    self.class_ = 'soldier'
+                    self.stats.strength += 3
+                case 6:
+                    self.class_ = 'outlander'
+                    self.stats.wisdom += 3
         else:
-            data = base_classes[hp_diff]
+            self.hp = self.stats.strength + hp_diff
+            if self.extra_classes:
+                data = random.choice(extra_classes[hp_diff])
+            else:
+                data = base_classes[hp_diff]
 
-        self.abilities.extend(data['abilities'])
-        self.class_ = data['class']
-        self._num_spells = data['spells']
-        self._num_weapons = data['weapons']
+            self.abilities.extend(data.abilities)
+            self.class_ = data.name
+            self._num_spells = data.num_spells
+            self._num_weapons = data.num_weapons
+            self.max_load *= data.load_multiplier
+            if data.items is not None:
+                self.inventory = data.items.copy()
 
     def _generate_inventory(self):
-        self.inventory = [
+        self.inventory.extend([
             cloak,
             knife,
             torches,
             waterskin,
-        ]
+        ])
+
+        if not hasattr(self, '_num_weapons'):
+            return
+
         weapons = []
-        while len([x for x in weapons if x < 6]) < self._num_weapons:
+        while len([x for x in weapons if x < 6]) < getattr(self, '_num_weapons', 0):
             weapons.append(random.randint(1, 6))
 
         for weapon in weapons:
@@ -156,7 +194,7 @@ class CharacterGenerator:
                     self.inventory.append(random.choice(ARMOR))
 
     def _generate_spells(self):
-        for _ in range(self._num_spells):
+        for _ in range(getattr(self, '_num_spells', 0)):
             action = random.choice(ACTIONS)
             objects = set()
 

@@ -5,6 +5,7 @@ import pydantic
 
 class Item(pydantic.BaseModel):
     slots: int = pydantic.Field(1, const=True)
+    cost: int
 
 
 class Stats(pydantic.BaseModel):
@@ -22,19 +23,16 @@ class Size(str, enum.Enum):
 
 class Armor(Item):
     name: str
-    cost: int
     slots: int = pydantic.Field(2, const=True)
 
 
 class Ammo(Item):
     name: str
     info: str
-    cost: int
 
 
 class Equipment(Item):
     name: str
-    cost: int
     quantity: int = 1
 
 
@@ -44,8 +42,17 @@ class Spell(pydantic.BaseModel):
 
 class Weapon(Item):
     name: str
-    cost: int
     size: Size
     ranged: bool
     throwable: bool = False
     twohanded: bool = False
+
+
+class Class(pydantic.BaseModel):
+    name: str
+    abilities: list[str]
+    num_spells: int = 0
+    num_weapons: int = 1
+    spells: list[Spell] | None
+    items: list[Equipment|Weapon] | None
+    load_multiplier: int = 1

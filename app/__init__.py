@@ -8,7 +8,9 @@ from uuid import UUID
 import bugsnag
 from bugsnag.asgi import BugsnagMiddleware
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
+from .bastards import _register_bastards
 from .config import Config
 from .utils.plugin import find_modules
 from .utils.plugin import import_string
@@ -35,6 +37,7 @@ def _register_bugsnag(app: FastAPI) -> FastAPI:
 def create_app():
     app = FastAPI()
 
+    _register_bastards(app)
     _register_handlers(app, 'app.handlers')
     app = _register_bugsnag(app)
 

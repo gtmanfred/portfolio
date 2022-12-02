@@ -19,9 +19,9 @@ ACTIONS = (
     Action(text="Become {0}", num_objects=1),
     Action(text="Disintegrate {0}", num_objects=1),
     Action(text="Mend {0}", num_objects=1),
-    Action(text="Combine {0} and {1}", num_objects=1),
+    Action(text="Combine {0} and {1}", num_objects=2),
     Action(text="Conceal {0}", num_objects=1),
-    Action(text="Scuplt {0}", num_objects=1),
+    Action(text="Sculpt {0}", num_objects=1),
 )
 
 

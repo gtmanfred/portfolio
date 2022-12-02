@@ -12,7 +12,7 @@ class Response(Character):
     seed: uuid.UUID
 
 
-@router.get('/bastards', response_model=Response)
+@router.get('/bastards', response_model=Response, operation_id="get_new_character")
 def get_new_character(commoner: bool = False, extra_classes: bool = False):
     seed = uuid.uuid4()
     return {
@@ -25,8 +25,8 @@ def get_new_character(commoner: bool = False, extra_classes: bool = False):
     }
 
 
-@router.get('/bastards/{character_id}', response_model=Response)
-def get_new_character(character_id: uuid.UUID, commoner: bool = False, extra_classes: bool = False):
+@router.get('/bastards/{character_id}', response_model=Response, operation_id="get_character")
+def get_character(character_id: uuid.UUID, commoner: bool = False, extra_classes: bool = False):
     return {
         "seed": character_id,
         **CharacterGenerator.create(

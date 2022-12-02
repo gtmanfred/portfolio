@@ -1,0 +1,133 @@
+body {
+  background: #eee;
+  font-size: 1em;
+  padding: 0;
+  margin: 0;
+  line-height: 150%;
+  font-family: "Josefin Sans", Sans-serif;
+  zoom: 1; /* maybe fix IE stupidness */
+  -webkit-font-smoothing: antialiased;
+  -moz-font-smoothing: antialiased;
+}
+
+h1,
+h3 {
+  font-family: "Metamorphous", cursive;
+}
+h1 {
+  font-size: 1.2em;
+  text-align: center;
+  margin: 0;
+}
+h2.system,
+h2.appearance {
+  font-size: 0.6em;
+  color: #333;
+  margin: 0;
+}
+h2.appearance {
+  font-size: 0.8em;
+  margin-bottom: 1em;
+  line-height: 1.2em;
+}
+h2 {
+  font-size: 1em;
+  text-align: center;
+}
+h3 {
+  font-size: 1em;
+  margin-bottom: 0.2em;
+  margin-top: 0.8em;
+  clear: both;
+}
+
+/* Content */
+
+#container {
+  width: 32em;
+  margin: 0 auto;
+  padding: 1em 0;
+}
+
+/* Attribute Tables */
+
+table {
+  padding: 0.5em;
+  border-bottom: 1px solid #333;
+  border-spacing: 0;
+}
+table td,
+table th {
+  width: 12em;
+  vertical-align: top;
+  text-align: left;
+  padding: 0;
+}
+table.attr {
+  border-top: 1px solid #333;
+}
+
+/* Additional Content Tables and Lists */
+
+p {
+  padding: 0 0.5em;
+}
+
+.block {
+  width: 15em;
+  padding: 0 0.5em;
+  margin: 0;
+  float: left;
+}
+
+table.skills {
+  border: 0;
+  padding: 0;
+}
+
+ul {
+  margin: 0;
+  padding-left: 1em;
+  list-style: circle;
+}
+
+li p {
+  margin: 0;
+}
+
+footer {
+  clear: both;
+  padding-top: 2em;
+}
+footer p:first-child {
+  border-top: 1px solid gray;
+  padding-top: 1em;
+}
+footer p {
+  font-size: 0.8em;
+  line-height: 130%;
+}
+
+.btn {
+  background-color: DodgerBlue; /* Blue background */
+  border: none; /* Remove borders */
+  color: white; /* White text */
+  padding: 12px 16px; /* Some padding */
+  font-size: 16px; /* Set a font size */
+  cursor: pointer; /* Mouse pointer on hover */
+}
+
+/* Darker background on mouse-over */
+.btn:hover {
+  background-color: RoyalBlue;
+}
+
+.btn:active {
+  background-color: lightblue;
+}
+
+@media print {
+  .btn{
+    visibility: hidden;
+  }
+}
