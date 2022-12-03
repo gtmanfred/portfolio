@@ -49,12 +49,12 @@
         <div id="extras">
           <div class="block">
             <h3>Inventory</h3>
-            <strong>Load</strong><span class="mdi mdi-bag-personal">: ...</span>
+            <strong>Load</strong><span class="mdi mdi-bag-personal">: {{getLoad()}}</span>
             <ol>
               <div v-for="item in character.inventory">
                 <li v-if="item.quantity > 1">{{ item.name }} (qty: {{item.quantity}})</li>
                 <li v-else-if="item.info">{{ item.name }}: {{item.info}}</li>
-                <li v-else-if="item.size">{{ item.name }}: ({{item.size.name}})</li>
+                <li v-else-if="item.size">{{ item.name }} ({{getWeaponData(item)}})</li>
                 <li v-else>{{ item.name }}</li>
               </div>
             </ol>
@@ -110,6 +110,27 @@
         );
       },
       methods: {
+        getLoad() {
+          let current_load = 0;
+          for (i=0; i<this.character.inventory.length; i++) {
+            current_load += this.character.inventory[i].slots;
+          };
+          return `${current_load}/${this.character.max_load}`;
+        },
+        getWeaponData(item){
+          let note = item.size;
+          console.log(item)
+          if (item.throwable) {
+            note += ", throwable";
+          };
+          if (item.twohanded) {
+            note += ", two-handed";
+          };
+          if (item.ranged) {
+            note += ", ranged";
+          };
+          return `${note}`;
+        },
         copyLink() {
           navigator.clipboard.writeText(`${window.location.origin}/bastards/${this.character.seed}${window.location.search}`);
         },
