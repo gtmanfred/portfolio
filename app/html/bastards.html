@@ -7,6 +7,7 @@
 <html>
   <head>
     <meta name="viewport" content="width=480"/>
+    <img src="/static/bastards.png" class="center"></img>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Josefin+Sans:400,700|Metamorphous" type="text/css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css" type="text/css">
     <link rel="stylesheet" href="/static/create.css" type="text/css" media="screen" title="site style" charset="utf-8">
@@ -26,7 +27,6 @@
       template: `
       <div v-if="character">
         <title>A Random {{ character.klass }} for Bastards</title>
-        <h2 class="system">Bastards</h2>
         <h1>{{ character.klass }}</h1>
         
         <table class="attr">

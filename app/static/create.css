@@ -9,6 +9,12 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-font-smoothing: antialiased;
 }
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 25%;
+}
 
 h1,
 h3 {
@@ -55,12 +61,14 @@ table {
   padding: 0.5em;
   border-bottom: 1px solid #333;
   border-spacing: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 table td,
 table th {
-  width: 12em;
+  width: 16em;
   vertical-align: top;
-  text-align: left;
+  text-align: center;
   padding: 0;
 }
 table.attr {
