@@ -1,0 +1,63 @@
+<div v-if="character">
+  <title>A Random {{ character.klass }} for Bastards</title>
+  <h1>{{ character.klass }}</h1>
+  
+  <table class="attr">
+    <tr>
+      <td><strong>Strength</strong>: {{ character.stats.strength }}</td>
+      <td><strong>Luck</strong><span class="mdi mdi-clover">: {{ character.stats.luck}}</span></td>
+    </tr>
+    <tr>
+      <td><strong>Dexterity</strong>: {{ character.stats.dexterity }}</td>
+      <td><strong>HP</strong><span class="mdi mdi-heart">: {{character.hp}}</span></td>
+    </tr>
+    <tr>
+      <td><strong>Wisdom</strong>: {{ character.stats.wisdom }}</td>
+      <td><strong>AC</strong><span class="mdi mdi-shield">: {{character.ac}}</span></td>
+    </tr>
+  </table>
+  
+  <p v-for="ability in character.abilities">{{ability}}</p>
+  
+  <div id="extras">
+    <div class="block">
+      <h3>Inventory</h3>
+      <strong>Load</strong><span class="mdi mdi-bag-personal">: {{getLoad()}}</span>
+      <ol>
+        <div v-for="item in character.inventory">
+          <li v-if="item.quantity > 1">{{ item.name }} (qty: {{item.quantity}})</li>
+          <li v-else-if="item.info">{{ item.name }}: {{item.info}}</li>
+          <li v-else-if="item.size">{{ item.name }} ({{getWeaponData(item)}})</li>
+          <li v-else>{{ item.name }}</li>
+        </div>
+      </ol>
+    </div>
+    <div class="block" v-if="character.spells.length">
+      <h3>Spells</h3>
+      <ol>
+        <li v-for="spell in character.spells">{{ spell.text }}</li>
+      </ol>
+    </div>
+  </div>
+  
+  <footer>
+    <tr>
+      <td>
+        <button class="btn" @click="copyLink()"><span class="mdi mdi-content-copy">share</span></button>
+      </td>
+      <td>
+        <button class="btn" @click="createCharacter()"><span class="mdi mdi-account">create</span></button>
+      </td>
+      <td>
+        <button class="btn" @click="createCommoner()"><span class="mdi mdi-account-minus">commoner</span></button>
+      </td>
+      <td>
+        <button class="btn" @click="createWithExtraClasses()"><span class="mdi mdi-account-star">extra classes</span></button>
+      </td>
+    </tr>
+    <br>
+    <a href="https://ko-fi.com/gtmanfred">buy me a coffee</a>
+    <br>
+    <a href="https://github.com/gtmanfred/portfolio">github</a>
+  </footer>
+</div>
