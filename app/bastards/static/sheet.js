@@ -7,21 +7,24 @@ const Sheet = fetch('/bastards/template.html').then((response) => response.text(
       },
     },
     created() {
-      new SwaggerClient('/openapi.json').then(
-        (client) => {
-          if (this.$route.params.character_id) {
-            client.apis.bastards.get_character({character_id: this.$route.params.character_id}).then((resp) => {
-              this.character = resp.body;
-            });
-          } else {
-            client.apis.bastards.get_new_character().then((resp) => {
-              this.character = resp.body;
-            });
-          };
-        },
-      );
+      this.getCharacter();
     },
     methods: {
+      getCharacter() {
+        this.client.then(
+          (client) => {
+            if (this.$route.params.character_id) {
+              client.apis.bastards.get_character({character_id: this.$route.params.character_id}).then((resp) => {
+                this.character = resp.body;
+              });
+            } else {
+              client.apis.bastards.get_new_character().then((resp) => {
+                this.character = resp.body;
+              });
+            };
+          },
+        );
+      },
       getLoad() {
         let current_load = 0;
         for (i=0; i<this.character.inventory.length; i++) {
@@ -46,18 +49,25 @@ const Sheet = fetch('/bastards/template.html').then((response) => response.text(
         navigator.clipboard.writeText(`${window.location.origin}/bastards/${this.character.seed}${window.location.search}`);
       },
       createCharacter() {
-        router.go({ path: '/bastards/'})
+        router.push({ path: '/bastards/'}).then(() => {
+          this.getCharacter();
+        });
       },
       createCommoner() {
-        router.go({ path: '/bastards/', query: {commoner: true}})
+        router.push({ path: '/bastards/', query: {commoner: true}}).then(() => {
+          this.getCharacter();
+        });
       },
       createWithExtraClasses() {
-        router.go({ path: '/bastards/', query: {extra_classes: true}})
+        router.push({ path: '/bastards/', query: {extra_classes: true}}).then(() => {
+          this.getCharacter();
+        });
       },
     },
     data() {
       return {
         character: null,
+        client: new SwaggerClient('/openapi.json'),
       };
     },
   };
