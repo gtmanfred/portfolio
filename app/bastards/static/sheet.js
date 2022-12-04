@@ -1,4 +1,4 @@
-const Sheet = fetch('/templates/bastards.html').then((response) => response.text()).then((body) => {
+const Sheet = fetch('/bastards/template.html').then((response) => response.text()).then((body) => {
   return {
     template: body,
     computed: {
@@ -49,10 +49,10 @@ const Sheet = fetch('/templates/bastards.html').then((response) => response.text
         router.go({ path: '/bastards/'})
       },
       createCommoner() {
-        router.go({ name: 'sheet', query: {commoner: true}})
+        router.go({ path: '/bastards/', query: {commoner: true}})
       },
       createWithExtraClasses() {
-        router.go({ name: 'sheet', query: {extra_classes: true}})
+        router.go({ path: '/bastards/', query: {extra_classes: true}})
       },
     },
     data() {

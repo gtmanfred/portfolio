@@ -45,15 +45,17 @@
       <td>
         <button class="btn" @click="copyLink()"><span class="mdi mdi-content-copy">share</span></button>
       </td>
-      <td>
-        <button class="btn" @click="createCharacter()"><span class="mdi mdi-account">create</span></button>
-      </td>
-      <td>
-        <button class="btn" @click="createCommoner()"><span class="mdi mdi-account-minus">commoner</span></button>
-      </td>
-      <td>
-        <button class="btn" @click="createWithExtraClasses()"><span class="mdi mdi-account-star">extra classes</span></button>
-      </td>
+      <div v-if="! character_id">
+        <td>
+          <button class="btn" @click="createCharacter()"><span class="mdi mdi-account">create</span></button>
+        </td>
+        <td>
+          <button class="btn" @click="createCommoner()"><span class="mdi mdi-account-minus">commoner</span></button>
+        </td>
+        <td>
+          <button class="btn" @click="createWithExtraClasses()"><span class="mdi mdi-account-star">extra classes</span></button>
+        </td>
+      </div>
     </tr>
     <br>
     <a href="https://ko-fi.com/gtmanfred">buy me a coffee</a>

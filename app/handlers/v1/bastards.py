@@ -2,8 +2,8 @@ import uuid
 
 from fastapi import APIRouter
 
-from app.characters import Character
-from app.characters import CharacterGenerator
+from app.bastards.characters import Character
+from app.bastards.characters import CharacterGenerator
 
 
 router = APIRouter()

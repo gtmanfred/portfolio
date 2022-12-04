@@ -3,7 +3,7 @@ import random
 
 import pydantic
 
-from .utils.types import (
+from ..bastards.utils.types import (
     Ammo,
     Armor,
     Equipment,
@@ -12,11 +12,11 @@ from .utils.types import (
     Stats,
     Weapon,
 )
-from .data.classes import (
+from ..bastards.data.classes import (
     base_classes,
     extra_classes,
 )
-from .data.items import (
+from ..bastards.data.items import (
     ARMOR,
     WEAPON,
     cloak,
@@ -24,7 +24,7 @@ from .data.items import (
     torches,
     waterskin,
 )
-from .data.spells import (
+from ..bastards.data.spells import (
     ACTIONS,
     OBJECTS,
 )
